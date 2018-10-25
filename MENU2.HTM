@@ -158,7 +158,17 @@ window.addEventListener('DOMContentLoaded', function() {
 
 	oReq.onload = function(oEvent) {
 	  var blob = oReq.response;
-    handleFile(blob);
+    // handleFile(blob);
+    var fr = new FileReader()
+fr.onload = eve => {
+	console.log(fr.result)
+}
+fr.onerror = eve => {
+	console.error(fr.error)
+}
+fr.readAsArrayBuffer(blob);
+      player.loadMidiFile(new Uint8Array());
+      player.play();
 	};
 
 
@@ -177,6 +187,29 @@ window.addEventListener('DOMContentLoaded', function() {
     };
     reader.readAsArrayBuffer(file);
   }
+
+  function handleInput(filename, buffer) {
+  switch (filename.slice(filename.lastIndexOf('.')).toLowerCase()) {
+    case '.mld':
+      console.time('smf load');
+      player.loadMldFile(buffer);
+      console.timeEnd('smf load');
+      console.log(player);
+      player.play();
+      document.getElementById('title').innerHTML = player.getSequenceName();
+      document.getElementById('copyright').innerHTML = player.getCopyright().join('<br>');
+      break;
+    case '.mid':
+      console.time('smf load');
+      player.loadMidiFile(buffer);
+      console.timeEnd('smf load');
+      player.play();
+      document.getElementById('title').innerHTML = player.getSequenceName();
+      document.getElementById('copyright').innerHTML = player.getCopyright().join('<br>');
+      break;
+  }
+}
+
 }, false);
 </script>
 </BODY>
