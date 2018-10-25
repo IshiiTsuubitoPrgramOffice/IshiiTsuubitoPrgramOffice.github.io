@@ -146,70 +146,47 @@ window.addEventListener('message', function(ev) {
 }, false);
 
 function initPlayer() {
-  player.setLoop(true);
+  /** @type {boolean} */
+  var loop = true;
+  /** @type {boolean} */
+  var cc111 = true;
+  /** @type {boolean} */
+  var falcom = true;
+  /** @type {boolean} */
+  var mfi = true;
+  /** @type {number} */
+  var tempo = 1.0;
+  /** @type {number} 0-16383 */
+  var volume = 16383 * 0.5;
+
+  player.setLoop(loop);
+  player.setCC111Loop(cc111); // CC#111 Loop
+  player.setFalcomLoop(falcom); // Ys2 Eternal Loop
+  player.setMFiLoop(mfi); // MFi Loop
+  player.setTempoRate(tempo); // Playback tempo rate
+  player.setMasterVolume(volume); // Master Volume
+}
+
+function loadSMF(url) {
+  var xhr = new XMLHttpRequest();
+
+  xhr.open('GET', url, true);
+  xhr.addEventListener('load', function (event) {
+    /** @type {Uint8Array} */
+    var input = new Uint8Array(event.target.response);
+
+    // load MIDI file
+    player.loadMidiFile(input);
+    player.play();
+  }, false);
+  xhr.responseType = 'arraybuffer';
+  xhr.send();
 }
 
 window.addEventListener('DOMContentLoaded', function() {
   initPlayer();
   player.setWebMidiLink('./js/wml.html');
-    var oReq = new XMLHttpRequest();
-	oReq.open("GET", "./js/sound.mid", true);
-	oReq.responseType = "blob";
-
-	oReq.onload = function(oEvent) {
-	  var blob = oReq.response;
-    // handleFile(blob);
-    var fr = new FileReader()
-fr.onload = eve => {
-	console.log(fr.result)
-}
-fr.onerror = eve => {
-	console.error(fr.error)
-}
-fr.readAsArrayBuffer(blob);
-      player.loadMidiFile(new Uint8Array());
-      player.play();
-	};
-
-
-  // document.getElementById('file').addEventListener('change', onFileSelected, false);
-  // function onFileSelected(e) {
-
-  //   e.preventDefault();
-  // }
-
-  function handleFile(file) {
-    var reader = new FileReader();
-
-    reader.onload = function(e) {
-      var input = new Uint8Array(e.target.result);
-      handleInput(file.name, input);
-    };
-    reader.readAsArrayBuffer(file);
-  }
-
-  function handleInput(filename, buffer) {
-  switch (filename.slice(filename.lastIndexOf('.')).toLowerCase()) {
-    case '.mld':
-      console.time('smf load');
-      player.loadMldFile(buffer);
-      console.timeEnd('smf load');
-      console.log(player);
-      player.play();
-      document.getElementById('title').innerHTML = player.getSequenceName();
-      document.getElementById('copyright').innerHTML = player.getCopyright().join('<br>');
-      break;
-    case '.mid':
-      console.time('smf load');
-      player.loadMidiFile(buffer);
-      console.timeEnd('smf load');
-      player.play();
-      document.getElementById('title').innerHTML = player.getSequenceName();
-      document.getElementById('copyright').innerHTML = player.getCopyright().join('<br>');
-      break;
-  }
-}
-
+  loadSMF('./js/sound.mid');
 }, false);
 </script>
 </BODY>
