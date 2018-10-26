@@ -4,22 +4,15 @@
   <title></title>
   <script src="./sf2synth.min.js"></script>
   <script>
-    var url = './A320U.sf2';
-    var wml = new SoundFont.WebMidiLink();
-    var reverb;
+  var url = './A320U.sf2';
+  var wml = new SoundFont.WebMidiLink();
+  var reverb;
     wml.setLoadCallback(removeMessage);
     wml.setup(url);
-      wml.setReverb(false);
-    function removeMessage() {
+    wml.setReverb(false);
+  function removeMessage() {
     }
   </script>
-  <style>
-    * {
-      display: none;
-      background-color: white;
-    }
-
-  </style>
 </head>
 <body>
 </body>
