@@ -146,30 +146,18 @@ NodeList.prototype.forEach = Array.prototype.forEach;
 var player = new SMF.Player();
 window.addEventListener('message', function(ev) {
   if (ev.data === 'link,ready') {
-    player.getWebMidiLink().style.height = player.getWebMidiLink().contentDocument.body.scrollHeight + 1 + 'px';
+    player.getWebMidiLink().style.height = 0;
+    player.getWebMidiLink().style.display = 'none';
   }
 }, false);
 
 function initPlayer() {
-  /** @type {boolean} */
-  var loop = true;
-  /** @type {boolean} */
-  var cc111 = true;
-  /** @type {boolean} */
-  var falcom = true;
-  /** @type {boolean} */
-  var mfi = true;
-  /** @type {number} */
-  var tempo = 0.7;
-  /** @type {number} 0-16383 */
-  var volume = 16383 * 0.4;
-
-  player.setLoop(loop);
-  player.setCC111Loop(cc111); // CC#111 Loop
-  player.setFalcomLoop(falcom); // Ys2 Eternal Loop
-  player.setMFiLoop(mfi); // MFi Loop
-  player.setTempoRate(tempo); // Playback tempo rate
-  player.setMasterVolume(volume); // Master Volume
+  player.setLoop(true);
+  player.setCC111Loop(true); // CC#111 Loop
+  player.setFalcomLoop(true); // Ys2 Eternal Loop
+  player.setMFiLoop(true); // MFi Loop
+  player.setTempoRate(0.7); // Playback tempo rate
+  player.setMasterVolume(16383 * 0.4); // Master Volume
 }
 
 function loadSMF(url) {
@@ -177,7 +165,6 @@ function loadSMF(url) {
 
   xhr.open('GET', url, true);
   xhr.addEventListener('load', function (event) {
-    /** @type {Uint8Array} */
     var input = new Uint8Array(event.target.response);
 
     // load MIDI file
