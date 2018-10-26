@@ -1,3 +1,8 @@
+<style>
+	iframe {
+		dispaly: none;
+	}
+</style>
 <BODY BGCOLOR="#00f0f0" ALIGN="CENTER">
 	<IMG SRC="./IMG/LOGO.GIF" WIDTH="200" HEIGHT="200"><BR>
 	<BR>
@@ -134,4 +139,47 @@ init();
   gtag('config', 'UA-127968117-1');
 </script>
 
+  <script src="./js/smf.player.min.js"></script>
+
+<script>
+NodeList.prototype.forEach = Array.prototype.forEach;
+var player = new SMF.Player();
+ player.getWebMidiLink().style.display = 'none';
+window.addEventListener('message', function(ev) {
+  if (ev.data === 'link,ready') {
+    player.getWebMidiLink().style.height = 0;
+    player.getWebMidiLink().style.display = 'none';
+  }
+}, false);
+
+function initPlayer() {
+  player.setLoop(true);
+  player.setCC111Loop(true); // CC#111 Loop
+  player.setFalcomLoop(true); // Ys2 Eternal Loop
+  player.setMFiLoop(true); // MFi Loop
+  player.setTempoRate(0.7); // Playback tempo rate
+  player.setMasterVolume(16383 * 0.4); // Master Volume
+}
+
+function loadSMF(url) {
+  var xhr = new XMLHttpRequest();
+
+  xhr.open('GET', url, true);
+  xhr.addEventListener('load', function (event) {
+    var input = new Uint8Array(event.target.response);
+
+    // load MIDI file
+    player.loadMidiFile(input);
+    player.play();
+  }, false);
+  xhr.responseType = 'arraybuffer';
+  xhr.send();
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+  initPlayer();
+  player.setWebMidiLink('./js/wml.html');
+  loadSMF('./js/sound.mid');
+}, false);
+</script>
 </BODY>
