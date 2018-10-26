@@ -144,7 +144,6 @@ init();
 <script>
 NodeList.prototype.forEach = Array.prototype.forEach;
 var player = new SMF.Player();
- player.getWebMidiLink().style.display = 'none';
 window.addEventListener('message', function(ev) {
   if (ev.data === 'link,ready') {
     player.getWebMidiLink().style.height = 0;
