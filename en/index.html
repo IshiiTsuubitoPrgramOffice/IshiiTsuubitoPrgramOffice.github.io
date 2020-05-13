@@ -16,16 +16,18 @@
             list-style: none;
         }
         a {
-            color: #000;
+            text-shadow: 0 0 8px #000;
             text-decoration: underline;
             letter-spacing: 0.15em;
+            color: transparent;
         }
         html {
-            transform: none;
-            background-color: #ccc;
-            color: #111;
+            transform: blur(8px);
+            text-shadow: 0 0 8px #111;
+            color: transparent;
         }
         body {
+            background-color: #ccc;
             transform: none;
             margin: 0 auto;
             width: 960px;
@@ -34,12 +36,13 @@
             font-size: 98px;
         }
         h1 {
+            text-shadow: 0 0 8px #ccc;
             font-weight: 700;
             width: 100%;
             background-color: #111;
-            color: #ccc;
         }
         strong {
+            text-shadow: 0 0 8px #111;
             text-decoration: line-through;
         }
         h1#logo {
@@ -54,7 +57,7 @@
 
         .contents {
             transform: rotateZ(-4deg);
-            padding: 10px;
+            padding: 8px;
         }
 
         .contents > h1 {
@@ -70,8 +73,8 @@
         $(() => {
             setInterval(() => {
                 $strong = $('strong');
-                $strong.css({color: ''});
-                $($strong[(Math.random() * $strong.length) ^ 0]).css({color: 'transparent'});
+                $strong.css({'text-shadow': '0 0 8px #111;'});
+                $($strong[(Math.random() * $strong.length) ^ 0]).css({'text-shadow': '0 0 8px transparent;'});
             }, 100);
             $('.contents').each((i, e) => $(e).css({transform: `rotateZ(${(Math.random() - 0.3) * 4.5}deg`}));
         });
