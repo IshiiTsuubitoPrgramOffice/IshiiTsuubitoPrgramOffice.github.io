@@ -1,0 +1,122 @@
+<html>
+<head>
+    <script   src="https://code.jquery.com/jquery-3.5.1.slim.min.js"   integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="   crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@300;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            transform: rotateZ(0.7deg);
+            transform-origin: center center;
+            line-height: 100%;
+            border: 2px solid #eee;
+        }
+        ul {
+            list-style: none;
+        }
+        a {
+            color: #000;
+            text-decoration: underline;
+            letter-spacing: 0.15em;
+        }
+        html {
+            transform: none;
+            background-color: #ccc;
+            color: #111;
+        }
+        body {
+            transform: none;
+            margin: 0 auto;
+            width: 960px;
+            font-family: 'Teko', sans-serif;
+            font-weight: 300;
+            font-size: 98px;
+        }
+        h1 {
+            font-weight: 700;
+            width: 100%;
+            background-color: #111;
+            color: #ccc;
+        }
+        strong {
+            text-decoration: line-through;
+        }
+        h1#logo {
+            margin: 0 auto;
+            margin-top: 60px;
+            transform: rotateZ(-6.9deg);
+            font-size: 220px;
+            width: 850px;
+            height: 850px;
+            text-align: right;
+        }
+
+        .contents {
+            transform: rotateZ(-4deg);
+            padding: 10px;
+        }
+
+        .contents > h1 {
+            font-size: 180px;
+        }
+
+        .subcontents > h1 {
+            font-size: 120px;
+        }
+    </style>
+    <script src=""></script>
+    <script>
+        $(() => {
+            setInterval(() => {
+                $strong = $('strong');
+                $strong.css({color: ''});
+                $($strong[(Math.random() * $strong.length) ^ 0]).css({color: 'transparent'});
+            }, 100);
+            $('.contents').each((i, e) => $(e).css({transform: `rotateZ(${(Math.random() - 0.3) * 4.5}deg`}));
+        });
+    </script>
+</head>
+<body>
+    <h1 id="logo">ISHII<br>2bit<br>Program<br>Office</h1>
+    <article id="about" class="contents">
+        <h1>About</h1>
+        <section>
+            <p><strong>ISHII 2bit Program Office</strong> of the <strong>ISHII 2bit</strong>, by the <strong>ISHII 2bit</strong>, for the <strong>ISHII 2bit</strong>.</p>
+        </section>
+    </article>
+    <article id="profile" class="contents">
+        <h1>Profile</h1>
+        <section class="subcontents">
+            <h1>ISHII 2bit</h1>
+            <p><strong>Programmer</strong>, <strong>Software Engineer</strong> (of <strong>interactive system</strong>, <strong>network</strong>, <strong>mobile application</strong> and etc...), <strong>Lighting Designer</strong>, member of <strong>Haguki Wo Kamu To Ringo Kara Ti Ga Deru</strong>.</p>
+            <p>Mainly using</p>
+            <ul>
+                <li><strong>C++</strong> / <strong>openFrameworks</strong></li>
+                <li><strong>JavaScript</strong> / <strong>node.js</strong></li>
+                <li><strong>Objective-C</strong></li>
+            </ul>
+        </section>
+    </article>
+    <article id="works" class="contents">
+        <h1>Works</h1>
+        <section>
+            <p><strong>NOT yet ready for!!</strong></p>
+            <p>in preparation now.</p>
+            <!-- <ul>
+                <li><strong></strong></li>
+                <li><strong></strong></li>
+                <li><strong></strong></li>
+            </ul> -->
+        </section>
+    </article>
+    <article id="link" class="contents">
+        <h1>Link</h1>
+        <section>
+            <ul>
+                <li><a href="../index.htm">In Japanese</a></li>
+                <li><a href="https://github.com/2bbb">github</a></li>
+                <li><a href="https://twitter.com/2bbb">Official Twitter</a></li>
+                <li><a href="https://twitter.com/2bbb">Unofficial Twitter</a></li>
+            </ul>
+        </section>
+    </article>
+</body>
+</html>
