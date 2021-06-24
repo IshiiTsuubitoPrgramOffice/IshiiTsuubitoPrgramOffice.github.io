@@ -3,10 +3,10 @@
     <meta name="keyword" content="ISHII 2bit, ISHII 2bit Program Office">
     <meta name="description" content="Webpage of ISHII 2bit Program Office">
     <title>ISHII 2bit Program Office</title>
-    <script   src="https://code.jquery.com/jquery-3.5.1.slim.min.js"   integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="   crossorigin="anonymous"></script>
+    <script src="../js/noise.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Teko:wght@300;700&display=swap" rel="stylesheet">
     <style>
-        * {
+        *:not(canvas, body, html) {
             transform: rotateZ(0.7deg);
             transform-origin: center center;
             line-height: 100%;
@@ -22,18 +22,26 @@
             color: transparent;
         }
         html {
-            transform: blur(8px);
+            /* transform: blur(8px); */
             text-shadow: 0 0 8px #111;
             color: transparent;
+            width: 100%;
+            height: 100%;
         }
         body {
             background-color: #ccc;
             transform: none;
             margin: 0 auto;
-            width: 960px;
+            width: 100%;
+            height: 100%;
             font-family: 'Teko', sans-serif;
             font-weight: 300;
             font-size: 98px;
+        }
+        #container {
+            width: 960px;
+            margin: 0 auto;
+            padding: 0;
         }
         h1 {
             text-shadow: 0 0 8px #ccc;
@@ -67,62 +75,132 @@
         .subcontents > h1 {
             font-size: 120px;
         }
+
+        #background_canvas {
+            /* transform: rotateZ('1.4deg'); */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            margin: 0;
+        }
     </style>
-    <script src=""></script>
     <script>
-        $(() => {
-            setInterval(() => {
-                $strong = $('strong');
-                $strong.css({'text-shadow': '0 0 8px #111;'});
-                $($strong[(Math.random() * $strong.length) ^ 0]).css({'text-shadow': '0 0 8px transparent;'});
-            }, 100);
-            $('.contents').each((i, e) => $(e).css({transform: `rotateZ(${(Math.random() - 0.3) * 4.5}deg`}));
+        console.log('script', noise);
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('dom content load');
+            const canvas = document.getElementsByTagName('canvas')[0];
+            const g = canvas.getContext('2d');
+            console.log(window.innerWidth, window.innerHeight);
+            canvas.style.width = window.innerWidth + 'px';
+            canvas.style.height = window.innerHeight + 'px';
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const size = 20;
+
+            noise.seed(Math.random());
+
+            const start = new Date().getTime();
+            let now = 0.0;
+
+            const offset_seeds = {};
+            function setupOffsetSeeds() {
+                for(let i = -2, is = 0 ^ (canvas.width / size) + 2; i < is; i++) {
+                    offset_seeds[i] = noise.simplex2(i, now);
+                }
+            }
+            setupOffsetSeeds();
+
+            const offsets = {};
+            function setupOffsets() {
+                for(let i = -2, is = 0 ^ (canvas.width / size) + 2; i < is; i++) {
+                    offsets[i] = noise.simplex2(offset_seeds[i], now) * size;
+                }
+            }
+            setupOffsets();
+
+            function draw() {
+                now = (new Date().getTime() - start) * 0.001;
+                const g = canvas.getContext('2d');
+                const hw = canvas.width * 0.5;
+                const hh = canvas.height * 0.5;
+                const mat = g.getTransform();
+                g.clearRect(0, 0, canvas.width, canvas.height);
+                const s = Math.random() * size;
+                g.fillStyle = '#000';
+                const hs = size * 0.5;
+                for(let i = -2, is = 0 ^ (canvas.width / size) + 2; i < is; i++) {
+                    offsets[i] += (noise.simplex2(offset_seeds[i], now * 0.001) + 1.0);
+                    const offset = offsets[i] % size;
+                    const tmp = [];
+                    for(let j = -2, js = 0 ^ (canvas.height / size) + 2; j < js; j++) {
+                        const x = (i + 0.5) * size;
+                        const y = (j + 0.5) * size + offset;
+                        g.beginPath();
+                        g.arc(x, y, 0.25 * size * (noise.simplex3(x * 0.01, y * 0.01 + offsets[i] * 0.001, now * 0.001 + offsets[i] * 0.01) + 1), 0, 2 * Math.PI);
+                        g.fill();
+                    }
+                }
+                window.requestAnimationFrame(draw);
+            } // end of draw
+            window.requestAnimationFrame(draw);
+
+            const resetSeeder = Array.from(document.querySelectorAll('*'));
+            resetSeeder.forEach(reseter => {
+                reseter.addEventListener('mouseover', () => {
+                    setupOffsetSeeds();
+                });
+            });
         });
     </script>
 </head>
 <body>
-    <h1 id="logo">ISHII<br>2bit<br>Program<br>Office</h1>
-    <article id="about" class="contents">
-        <h1>About</h1>
-        <section>
-            <p><strong>ISHII 2bit Program Office</strong> of the <strong>ISHII 2bit</strong>, by the <strong>ISHII 2bit</strong>, for the <strong>ISHII 2bit</strong>.</p>
-        </section>
-    </article>
-    <article id="profile" class="contents">
-        <h1>Profile</h1>
-        <section class="subcontents">
-            <h1>ISHII 2bit</h1>
-            <p><strong>Programmer</strong>, <strong>Software Engineer</strong> (of <strong>interactive system</strong>, <strong>network</strong>, <strong>mobile application</strong> and etc...), <strong>Lighting Designer</strong>, member of <strong>Haguki Wo Kamu To Ringo Kara Ti Ga Deru</strong>.</p>
-            <p>Mainly using</p>
-            <ul>
-                <li><strong>C++</strong> / <strong>openFrameworks</strong></li>
-                <li><strong>JavaScript</strong> / <strong>node.js</strong></li>
-                <li><strong>Objective-C</strong></li>
-            </ul>
-        </section>
-    </article>
-    <article id="works" class="contents">
-        <h1>Works</h1>
-        <section>
-            <p><strong>NOT yet ready for!!</strong></p>
-            <p>in preparation now.</p>
-            <!-- <ul>
-                <li><strong></strong></li>
-                <li><strong></strong></li>
-                <li><strong></strong></li>
-            </ul> -->
-        </section>
-    </article>
-    <article id="link" class="contents">
-        <h1>Link</h1>
-        <section>
-            <ul>
-                <li><a href="../index.htm">In Japanese</a></li>
-                <li><a href="https://github.com/2bbb">github</a></li>
-                <li><a href="https://twitter.com/ishii_2bit">Official Twitter</a></li>
-                <li><a href="https://twitter.com/2bbb">Unofficial Twitter</a></li>
-            </ul>
-        </section>
+    <canvas id='background_canvas'></canvas>
+    <article id='container' width=100 height=100>
+        <h1 id="logo">ISHII<br>2bit<br>Program<br>Office</h1>
+        <article id="about" class="contents">
+            <h1>About</h1>
+            <section>
+                <p><strong>ISHII 2bit Program Office</strong> of the <strong>ISHII 2bit</strong>, by the <strong>ISHII 2bit</strong>, for the <strong>ISHII 2bit</strong>.</p>
+            </section>
+        </article>
+        <article id="profile" class="contents">
+            <h1>Profile</h1>
+            <section class="subcontents">
+                <h1>ISHII 2bit</h1>
+                <p><strong>Programmer</strong>, <strong>Software Engineer</strong> (of <strong>interactive system</strong>, <strong>network</strong>, <strong>mobile application</strong> and etc...), <strong>Lighting Designer</strong>, member of <strong>Haguki Wo Kamu To Ringo Kara Ti Ga Deru</strong>.</p>
+                <p>Mainly using</p>
+                <ul>
+                    <li><strong>C++</strong> / <strong>openFrameworks</strong></li>
+                    <li><strong>JavaScript</strong> / <strong>node.js</strong></li>
+                    <li><strong>Objective-C</strong></li>
+                </ul>
+            </section>
+        </article>
+        <article id="works" class="contents">
+            <h1>Works</h1>
+            <section>
+                <p><strong>NOT yet ready for!!</strong></p>
+                <p>in preparation now.</p>
+                <!-- <ul>
+                    <li><strong></strong></li>
+                    <li><strong></strong></li>
+                    <li><strong></strong></li>
+                </ul> -->
+            </section>
+        </article>
+        <article id="link" class="contents">
+            <h1>Link</h1>
+            <section>
+                <ul>
+                    <li><a href="../index.htm">In Japanese</a></li>
+                    <li><a href="https://github.com/2bbb">github</a></li>
+                    <li><a href="https://twitter.com/ishii_2bit">Official Twitter</a></li>
+                    <li><a href="https://twitter.com/2bbb">Unofficial Twitter</a></li>
+                </ul>
+            </section>
+        </article>
     </article>
 </body>
 </html>
