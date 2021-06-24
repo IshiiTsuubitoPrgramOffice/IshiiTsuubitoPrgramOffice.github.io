@@ -1,5 +1,6 @@
 <html>
 <head>
+    <meta name="viewport" content="width=1080">
     <meta name="keyword" content="ISHII 2bit, ISHII 2bit Program Office">
     <meta name="description" content="Webpage of ISHII 2bit Program Office">
     <title>ISHII 2bit Program Office</title>
@@ -37,6 +38,7 @@
             font-family: 'Teko', sans-serif;
             font-weight: 300;
             font-size: 98px;
+            overflow-x: none;
         }
         #container {
             width: 960px;
@@ -91,12 +93,15 @@
         document.addEventListener('DOMContentLoaded', () => {
             console.log('dom content load');
             const canvas = document.getElementsByTagName('canvas')[0];
-            const g = canvas.getContext('2d');
-            console.log(window.innerWidth, window.innerHeight);
-            canvas.style.width = window.innerWidth + 'px';
-            canvas.style.height = window.innerHeight + 'px';
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            function resize_canvas() {
+                const g = canvas.getContext('2d');
+                console.log(window.innerWidth, window.innerHeight);
+                canvas.style.width = window.innerWidth + 'px';
+                canvas.style.height = window.innerHeight + 'px';
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resize_canvas();
             const size = 20;
 
             noise.seed(Math.random());
@@ -151,6 +156,9 @@
                 reseter.addEventListener('mouseover', () => {
                     setupOffsetSeeds();
                 });
+            });
+            window.addEventListener('resize', () => {
+                resize_canvas();
             });
         });
     </script>
